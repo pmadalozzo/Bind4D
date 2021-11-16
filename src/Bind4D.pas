@@ -262,11 +262,13 @@ begin
   for aAttr in RttiUtils.GetAttClass<FormDefault>(FForm) do
     aTitle := aAttr.Title;
 end;
+
 function TBind4D.ClearCacheComponents: iBind4D;
 begin
   Result := Self;
   RttiUtils.ClearCache;
 end;
+
 function TBind4D.ClearFieldForm: iBind4D;
 var
   aComp : TComponent;
@@ -276,13 +278,16 @@ begin
     TBind4DComponentFactory.New.Component(aComp).Clear;
 
 end;
+
 constructor TBind4D.Create;
 begin
 end;
+
 destructor TBind4D.Destroy;
 begin
   inherited;
 end;
+
 function TBind4D.Form( aValue : TForm) : iBind4D;
 begin
   Result := Self;
@@ -317,6 +322,7 @@ begin
         end
     )
 end;
+
 function TBind4D.FormToJson(aType : TTypeBindFormJson) : TJsonObject;
 var
   aAttr : FieldJsonBind;
@@ -332,6 +338,7 @@ begin
     end;
   end;
 end;
+
 function TBind4D.GetFieldsByType(aType : TTypeBindFormJson) : String;
 var
   aAttr : FieldJsonBind;
@@ -340,12 +347,14 @@ begin
     Result := Result + aType.This.GetJsonName(aAttr.Component(FForm)) + ',';
   Result := Copy(Result, 1, Length(Result) -1);
 end;
+
 function TBind4D.HSD4Service: iHS4Bind;
 begin
   if not Assigned(FHSService) then
     FHSService := THS4Bind.New;
   Result := FHSService;
 end;
+
 class function TBind4D.New: iBind4D;
 begin
   if not Assigned(vBind4D) then

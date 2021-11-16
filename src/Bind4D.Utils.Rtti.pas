@@ -40,7 +40,6 @@ begin
   FComponentList.Clear;
   FprpRttiList.Clear;
 end;
-
 procedure TBind4DUtilsRtti.CollectionNotifyEventComponent(Sender: TObject;
   const Item: TDictionary<TCustomAttribute, TComponent>; Action: TCollectionNotification);
 begin
@@ -63,7 +62,6 @@ begin
   FprpRttiList := TDictionary<TForm, TDictionary<TComponent, TRttiField>>.Create;
   FprpRttiList.OnValueNotify := CollectionNotifyEventPrpRtti;
 end;
-
 destructor TBind4DUtilsRtti.Destroy;
 begin
   FprpRttiList.Clear;

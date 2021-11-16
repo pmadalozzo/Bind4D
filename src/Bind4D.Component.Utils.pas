@@ -35,7 +35,11 @@ end;
 class function TBind4DComponentUtils.GetValueString(
   aComponent: TComponent): String;
 begin
-  Result := TBind4DComponentFactory.New.Component(aComponent).GetValueString;
+  Result :=
+  TBind4DComponentFactory
+   .New
+    .Component(aComponent)
+   .GetValueString;
 end;
 
 class function TBind4DComponentUtils.New: iBind4DComponentUtils;

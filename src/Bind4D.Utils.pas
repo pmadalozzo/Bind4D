@@ -29,7 +29,9 @@ type
       class function ExtrairMoeda(aValue : String) : String;
       class function FormatDateTime(aValue : String) : String;
       class function FormatDateTimeToJson (aValue : TDateTime) : String;
+      class function FormatDateToJson (aValue : TDateTime) : String;
       class function FormatStrJsonToDateTime(aValue : String) : TDateTime;
+      class function FormatStrJsonToDate(aValue: String): TDate;
       class function FormatStrJsonToTime(aValue : String) : TDateTime;
       class function FormatDateDataSet(aValue : String) : String;
       class function FormatDateTimeDataSet(aValue : String) : String;
@@ -63,16 +65,12 @@ class function TBind4DUtils.ApenasNumeros(valor: String): String;
 var
   i: Integer;
 begin
-
   for i := 0 to Length(valor) - 1 do
     if not CharInSet(valor[i], ['0' .. '9']) then
       delete(valor, i, 1);
-
   valor := StringReplace(valor, ' ', '', [rfReplaceAll]);
   valor := StringReplace(valor, '%', '', [rfReplaceAll]);
-
   Result := valor;
-
 end;
 class function TBind4DUtils.ExtrairMoeda(aValue: String): String;
 begin
@@ -126,7 +124,6 @@ begin
   end;
   Result := Copy(valor, 1, 5) + '-' + Copy(valor, 6, 3);
 end;
-
 class function TBind4DUtils.FormatarCNPJ(valor: string): string;
 var
   i: Integer;
@@ -243,7 +240,6 @@ begin
   else
     Result := LeftStr(valor, Length(valor) - 2) + ',' + decimais;
   end;
-
 end;
 class function TBind4DUtils.FormatarPhone(valor: string): string;
 var
@@ -269,9 +265,7 @@ begin
   end;
   Result := '(' + Copy(valor, 1, 2) + ') ' + Copy(valor, 3, 4) + '-' + Copy(valor, 7, 4);
 
-
 end;
-
 class function TBind4DUtils.FormatDateDataSet(aValue: String): String;
 var
   i: Integer;
@@ -376,6 +370,23 @@ begin
   segundo := Copy(Result, 13, 2);
   Result := ano + '-' + mes + '-' + dia + ' ' + hora + ':' + minuto + ':' + segundo +'.000';
 end;
+class function TBind4DUtils.FormatDateToJson(aValue: TDateTime): String;
+var
+  i: Integer;
+  dia,
+  mes,
+  ano : String;
+begin
+  Result := DateTimeToStr(aValue);
+  for i := 0 to Length(Result) - 1 do
+    if not CharInSet(Result[i], ['0' .. '9']) then
+      delete(Result, i, 1);
+  dia := Copy(Result, 1, 2);
+  mes := Copy(Result, 3, 2);
+  ano := Copy(Result, 5, 4);
+  Result := ano + '-' + mes + '-' + dia;
+end;
+
 class function TBind4DUtils.FormataPercentual(valor: string): string;
 var
   aux: string;
@@ -387,11 +398,9 @@ begin
   aux := ApenasNumeros(Valor);
   ValorFloat := 0.0;
   ValorInteiro := 0;
-
   if aux <> '' then
   begin
     aux := RightStr(aux,4);
-
     ValorInteiro := StrToInt(aux);
     ValorFloat := ValorInteiro / 100;
   end;
@@ -420,6 +429,23 @@ begin
   segundo := Copy(aValue, 13, 2);
   Result := StrToDateTime(dia + '/' + mes + '/' + ano + ' ' + hora + ':' + minuto + ':' + segundo);
 end;
+
+class function TBind4DUtils.FormatStrJsonToDate(aValue: String): TDate;
+var
+  i: Integer;
+  dia,
+  mes,
+  ano : String;
+begin
+  for i := 0 to Length(aValue) - 1 do
+    if not CharInSet(aValue[i], ['0' .. '9']) then
+      delete(aValue, i, 1);
+  dia := Copy(aValue, 1, 2);
+  mes := Copy(aValue, 3, 2);
+  ano := Copy(aValue, 5, 4);
+  Result := StrToDateTime(dia + '/' + mes + '/' + ano);
+end;
+
 class function TBind4DUtils.FormatStrJsonToTime(aValue: String): TDateTime;
 var
   i: Integer;
@@ -461,7 +487,6 @@ begin
       .Get(aImage);
   end;
 end;
-
 class procedure TBind4DUtils.GetImageS3Storage(aImage : TImage; aName : String);
 begin
   if Trim(aName) <> '' then
@@ -548,7 +573,6 @@ begin
     {$ENDIF}
   end;
 end;
-
 class function TBind4DUtils.SendImageS3Storage( var aImage : TImage; aAttr : S3Storage) : String;
 var
   aImageName: string;

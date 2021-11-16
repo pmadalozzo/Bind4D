@@ -80,7 +80,10 @@ function TBind4DComponentDateTimePicker.ApplyValue: iBind4DComponent;
 begin
   Result := Self;
   case FAttributes.FieldType of
-    ftDate,
+    ftDate :
+    begin
+      FComponent.Date := TBind4DUtils.FormatStrJsonToDate(FAttributes.ValueVariant);
+    end;
     ftDateTime :
     begin
       FComponent.Date := TBind4DUtils.FormatStrJsonToDateTime(FAttributes.ValueVariant);
@@ -122,7 +125,7 @@ end;
 
 function TBind4DComponentDateTimePicker.GetValueString: String;
 begin
-  Result := TBind4DUtils.FormatDateTimeToJson(FComponent.DateTime);
+  Result := TBind4DUtils.FormatDateToJson(FComponent.DateTime);
 end;
 
 class function TBind4DComponentDateTimePicker.New(aValue : TDateTimePicker) : iBind4DComponent;
